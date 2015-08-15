@@ -7,6 +7,7 @@ Work in progress, check back soon :)
 ## TODO
 
 * Support 'any' type
+* Ability to have ['string'] in type definition instead of {type: 'array', valueType: 'string'}?
 
 ## Basic types
 
