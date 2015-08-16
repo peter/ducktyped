@@ -17,7 +17,7 @@
   "-W097": false,
   "maxdepth": 3,
   "maxstatements": 30,
-  "maxcomplexity": 13,
+  "maxcomplexity": 16,
   "globalstrict": true,
   "undef":	true,
   "unused":	true,

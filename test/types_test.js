@@ -12,6 +12,17 @@ var u = require('lib/util'),
     isType = types.isType,
     metaTypes = types.metaTypes;
 
+var TYPES = {
+  evenNumber: {
+    type: 'number',
+    validate: function(v) { return v % 2 === 0; }
+  },
+  posNumber: {
+    type: 'number',
+    validate: function(v) { return v >= 0; }
+  }
+};
+
 describe('types', function() {
   describe('validateName', function() {
     it('works with a basic type name', function() {
@@ -140,6 +151,76 @@ describe('types', function() {
 
       assert(isType({type: 'regexp', value: /foobar/}));
       assert(!isType({type: 'regexp', value: 'foobar'}));
+    });
+
+    it('works with a validate function', function() {
+      var evenNumber = function(v) { return v % 2 === 0; },
+          identity = function(v) { return v; };
+      assert(isType({type: {type: 'number', validate: evenNumber}, value: 6}));
+      assert(!isType({type: {type: 'number', validate: evenNumber}, value: '6'}));
+      assert(!isType({type: {type: 'number', validate: evenNumber}, value: 5}));
+
+      assert(isType({type: {validate: identity}, value: 6}));
+      assert(isType({type: {validate: identity}, value: true}));
+      assert(isType({type: {validate: identity}, value: {}}));
+      assert(!isType({type: {validate: identity}, value: false}));
+      assert(!isType({type: {validate: identity}, value: 0}));
+    });
+
+    it('works with object attributes');
+
+    it('works with object valueType', function() {
+      assert(isType({type: {type: 'object', valueType: 'number'}, value: {foo: 5}}));
+      assert(!isType({type: {type: 'object', valueType: 'number'}, value: {foo: '5'}}));
+      assert(!isType({type: {type: 'object', valueType: 'number'}, value: [5]}));
+    });
+
+    it('works with array valueType', function() {
+      assert(isType({type: {type: 'array', valueType: 'number'}, value: [5]}));
+      assert(!isType({type: {type: 'array', valueType: 'number'}, value: ['5']}));
+      assert(!isType({type: {type: 'array', valueType: 'number'}, value: {foo: 5}}));
+    });
+
+    it('works with union types', function() {
+      assert(isType({type: 'number|string', value: 5}));
+      assert(isType({type: {type: 'number|string'}, value: 5}));
+      assert(isType({type: {type: 'number|string'}, value: 'foobar'}));
+      assert(!isType({type: 'number|string', value: true}));
+      assert(!isType({type: {type: 'number|string'}, value: true}));
+
+      assert(isType({types: TYPES, type: 'evenNumber|posNumber', value: 2}));
+      assert(isType({types: TYPES, type: 'evenNumber', value: -2}));
+      assert(!isType({types: TYPES, type: 'posNumber', value: -2}));
+      assert(isType({types: TYPES, type: 'evenNumber|posNumber', value: -2}));
+    });
+
+    it('works with intersection types', function() {
+      assert(!isType({types: TYPES, type: 'string&number', value: 2}));
+
+      assert(isType({types: TYPES, type: 'evenNumber&posNumber', value: 2}));
+      assert(isType({types: TYPES, type: 'evenNumber', value: -2}));
+      assert(!isType({types: TYPES, type: 'posNumber', value: -2}));
+      assert(!isType({types: TYPES, type: 'evenNumber&posNumber', value: -2}));
+    });
+
+    it('works with optional types', function() {
+      assert(isType({type: 'number', value: 2}));
+      assert(!isType({type: 'number', value: null}));
+      assert(isType({type: 'number?', value: null}));
+      assert(isType({type: 'number|string?', value: null}));
+
+      assert(isType({types: TYPES, type: 'evenNumber|posNumber', value: 3}));
+      assert(!isType({types: TYPES, type: 'evenNumber|posNumber', value: null}));
+      assert(isType({types: TYPES, type: 'evenNumber|posNumber?', value: null}));
+      assert(isType({types: TYPES, type: 'evenNumber|posNumber?', value: undefined}));
+    });
+
+    it('works with "any" types', function() {
+      assert(isType({type: 'any', value: 2}));
+      assert(isType({type: 'any', value: 'foobar'}));
+      assert(isType({type: 'any', value: null}));
+      assert(isType({type: {type: 'object', valueType: 'any'}, value: {foo: 'bar'}}));
+      assert(!isType({type: {type: 'object', valueType: 'any'}, value: ['bar']}));
     });
 
     it('works with meta types', function() {
