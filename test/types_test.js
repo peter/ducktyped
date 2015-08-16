@@ -257,9 +257,34 @@ describe('types', function() {
       assert(isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5, bar: 'baz'}}));
       assert(!isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5}}));
       assert(!isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5, bar: 6}}));
+
+      var structure = {
+        foo: 'boolean',
+        bar: [{baz: 'string'}]
+      };
+
+      var value = {
+        foo: true,
+        bar: [{baz: 'foobar'}, {baz: 'foobar'}]
+      };
+
+      assert(isStructure({structure: structure, value: value}));
     });
 
-    it('works with arrays');
-    it('raises an exception for invalid structures');
+    it('works with arrays', function() {
+      assert(isStructure({structure: ['number'], value: [1]}));
+      assert(isStructure({structure: ['number'], value: [5, 2, 3.14]}));
+      assert(isStructure({structure: ['number'], value: []}));
+      assert(!isStructure({structure: ['number'], value: [5, '4']}));
+      assert(!isStructure({structure: ['number'], value: null}));
+      assert(!isStructure({structure: ['number'], value: {}}));
+      assert(!isStructure({structure: ['number'], value: true}));
+    });
+
+    it('raises an exception for invalid structures', function() {
+      assert.throws(function() {
+        isStructure({structure: 'number', value: [1]});
+      });
+    });
   });
 });
