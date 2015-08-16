@@ -10,6 +10,7 @@ var u = require('lib/util'),
     validateName = types.validateName,
     lookup = types.lookup,
     isType = types.isType,
+    isStructure = types.isStructure,
     metaTypes = types.metaTypes;
 
 var TYPES = {
@@ -249,5 +250,14 @@ describe('types', function() {
         assert(!isType({types: metaTypes, type: 'type', value: type}), "Should *not* be valid: " + JSON.stringify(type));
       });
     });
+  });
+
+  describe('isType', function() {
+    it('works with objects', function() {
+      assert(isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5, bar: 'baz'}}));
+    });
+
+    it('works with arrays');
+    it('raises an exception for invalid structures');
   });
 });
