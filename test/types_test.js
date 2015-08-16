@@ -252,9 +252,11 @@ describe('types', function() {
     });
   });
 
-  describe('isType', function() {
+  describe('isStructure', function() {
     it('works with objects', function() {
       assert(isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5, bar: 'baz'}}));
+      assert(!isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5}}));
+      assert(!isStructure({structure: {foo: 'number', bar: 'string'}, value: {foo: 5, bar: 6}}));
     });
 
     it('works with arrays');
