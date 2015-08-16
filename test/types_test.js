@@ -41,7 +41,7 @@ describe('types', function() {
     });
 
     it('works with custom type names', function() {
-      var types = {recipe: {type: 'object', attributes: {name: 'string'}}};
+      var types = {recipe: {type: 'object', structure: {name: 'string'}}};
       assert(validateName(types, 'recipe'));
       assert(validateName(types, 'number'));
       assert(!validateName(types, 'foooobar'));
@@ -59,7 +59,7 @@ describe('types', function() {
     });
 
     it('works with custom type names', function() {
-      var types = {recipe: {type: 'object', attributes: {name: 'string'}}};
+      var types = {recipe: {type: 'object', structure: {name: 'string'}}};
       assert.equal(lookup(types, 'recipe'), types.recipe);
       assert.equal(lookup(types, 'typeSpec'), metaTypes.typeSpec);
     });
@@ -81,21 +81,21 @@ describe('types', function() {
       });
 
       it('works with custom types', function() {
-        var types = {recipe: {type: 'object', attributes: {name: 'string', ingredients: 'string'}}};
+        var types = {recipe: {type: 'object', structure: {name: 'string', ingredients: 'string'}}};
         assert.equal(spec.parse('recipe', {types: types}), {typeNames: ['recipe']});
       });
 
       it('works with union types', function() {
         assert.equal(spec.parse('number|string|object'), {typeNames: ['number', 'string', 'object'], operator: 'any'});
         assert.equal(spec.parse('number|string|object?'), {typeNames: ['number', 'string', 'object'], operator: 'any', optional: true});
-        var types = {recipe: {type: 'object', attributes: {name: 'string', ingredients: 'string'}}};
+        var types = {recipe: {type: 'object', structure: {name: 'string', ingredients: 'string'}}};
         assert.equal(spec.parse('number|recipe', {types: types}), {typeNames: ['number', 'recipe'], operator: 'any'});
       });
 
       it('works with intersection types', function() {
         assert.equal(spec.parse('number&string&object'), {typeNames: ['number', 'string', 'object'], operator: 'all'});
         assert.equal(spec.parse('number&string&object?'), {typeNames: ['number', 'string', 'object'], operator: 'all', optional: true});
-        var types = {recipe: {type: 'object', attributes: {name: 'string', ingredients: 'string'}}};
+        var types = {recipe: {type: 'object', structure: {name: 'string', ingredients: 'string'}}};
         assert.equal(spec.parse('number&recipe', {types: types}), {typeNames: ['number', 'recipe'], operator: 'all'});
       });
     });
@@ -168,7 +168,19 @@ describe('types', function() {
       assert(!isType({type: {validate: identity}, value: 0}));
     });
 
-    it('works with object attributes');
+    it('works with the structure attribute for objects', function() {
+      assert(isType({type: {type: 'object', structure: {name: 'string', level: 'number'}}, value: {name: 'foobar', level: 4}}));
+      assert(isType({type: {type: 'object', structure: {name: 'string', level: 'number'}}, value: {name: 'foobar', level: 4, foo: 'bar'}}));
+      assert(!isType({type: {type: 'object', structure: {name: 'string', level: 'number'}}, value: {name: 'foobar', level: '4'}}));
+      assert(!isType({type: {type: 'object', structure: {name: 'string', level: 'number'}}, value: {name: 'foobar'}}));
+    });
+
+    it('works with the structure attribute for arrays', function() {
+      assert(isType({type: {type: 'array', structure: ['number']}, value: [4]}));
+      assert(isType({type: {type: 'array', structure: ['number']}, value: [4, 5]}));
+      assert(isType({type: {type: 'array', structure: ['number']}, value: []}));
+      assert(!isType({type: {type: 'array', structure: ['number']}, value: [4, '5']}));
+    });
 
     it('works with object valueType', function() {
       assert(isType({type: {type: 'object', valueType: 'number'}, value: {foo: 5}}));
@@ -231,7 +243,7 @@ describe('types', function() {
 
       var validTypes = [
         {type: 'number'},
-        {type: 'object', attributes: {foo: 'number'}},
+        {type: 'object', structure: {foo: 'number'}},
         {type: 'object', valueType: 'number|string'},
         {type: 'number', validate: function(v) { return v % 2 === 0; }, default: 4}
       ];
@@ -244,7 +256,7 @@ describe('types', function() {
         {},
         {type: 'object', valueType: 5},
         {type: 'string', valueType: 'number'},
-        {type: 'string', attributes: {foo: 'number'}}
+        {type: 'string', structure: {foo: 'number'}}
       ];
       invalidTypes.forEach(function(type) {
         assert(!isType({types: metaTypes, type: 'type', value: type}), "Should *not* be valid: " + JSON.stringify(type));
