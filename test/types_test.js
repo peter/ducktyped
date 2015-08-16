@@ -147,7 +147,26 @@ describe('types', function() {
       assert(isType({types: metaTypes, type: 'typeName', value: 'typeName'}));
       assert(!isType({types: metaTypes, type: 'typeName', value: 'foooobar'}));
 
-      assert(isType({types: metaTypes, type: 'type', value: {type: 'number'}}));
+      var validTypes = [
+        {type: 'number'},
+        {type: 'object', attributes: {foo: 'number'}},
+        {type: 'object', valueType: 'number|string'},
+        {type: 'number', validate: function(v) { return v % 2 === 0; }, default: 4}
+      ];
+      validTypes.forEach(function(type) {
+        assert(isType({types: metaTypes, type: 'type', value: type}), "Should be valid: " + JSON.stringify(type));
+      });
+
+      var invalidTypes = [
+        null,
+        {},
+        {type: 'object', valueType: 5},
+        {type: 'string', valueType: 'number'},
+        {type: 'string', attributes: {foo: 'number'}}
+      ];
+      invalidTypes.forEach(function(type) {
+        assert(!isType({types: metaTypes, type: 'type', value: type}), "Should *not* be valid: " + JSON.stringify(type));
+      });
     });
   });
 });
