@@ -75,4 +75,8 @@ describe('typed_function', function() {
       }, /does not match/);
     });
   });
+
+  describe('variadicTypedFunction', function() {
+    it('does not require arity of function to match number of arguments passed');
+  });
 });
