@@ -13,7 +13,39 @@ Here is what Wikipedia says about the purpose of [Type Systems](https://en.m.wik
 
 ## Usage
 
-TODO
+### Function Arguments
+
+```javascript
+var TYPES = {
+  recipe: {
+    type: 'object',
+    structure: {
+      name: 'string',
+      popularity: 'number?',
+      ingredients: ['string']
+    }
+  },
+  deliverOptions: {
+    type: 'object',
+    structure: {
+      force: 'boolean?'
+    }
+  }
+};
+var typedFunction = require('ducktyped').typedFunction({types: TYPES})
+var deliver = typedFunction(['recipe', 'deliverOptions?'], function(recipe, options) {
+  // Implementation of deliver here
+});
+var recipe = {name: 'Pancakes', ingredients: ['milk', 'eggs', 'flour']};
+
+// VALID INVOCATIONS:
+deliver(recipe);
+deliver(recipe, {force: true});
+
+// INVALID INVOCATIONS THAT RAISE AN EXCEPTION:
+deliver('Pancakes');
+deliver(recipe, {force: 'yes'});
+```
 
 ## TODO
 
@@ -21,6 +53,8 @@ TODO
 * typedFunction with [type] will require all arguments to have same type...
 * Validate that types that are passed in are valid, i.e. {person: {name: 'string', email: 'string'}} should be {person: {structure: {name: 'string', email: 'string'}}}
 * Ability to have ['string'] in type definition instead of {type: 'array', valueType: 'string'}?
+* Type conversions, custom conversions, default conversions (string to float, string to integer, string to date), conversions: false
+* Do we need a variadicTypedFunction?
 
 ## Basic types
 

@@ -178,8 +178,16 @@ describe('types', function() {
     it('works with the structure attribute for arrays', function() {
       assert(isType({type: {type: 'array', structure: ['number']}, value: [4]}));
       assert(isType({type: {type: 'array', structure: ['number']}, value: [4, 5]}));
+      assert(!isType({type: {type: 'array', structure: ['number'], allowMore: false}, value: [4, 5]}));
+
       assert(isType({type: {type: 'array', structure: ['number']}, value: []}));
+      assert(!isType({type: {type: 'array', structure: ['number'], allowEmpty: false}, value: []}));
+      assert(isType({type: {type: 'array', valueType: 'number'}, value: []}));
+      assert(!isType({type: {type: 'array', valueType: 'number', allowEmpty: false}, value: []}));
       assert(!isType({type: {type: 'array', structure: ['number']}, value: [4, '5']}));
+      assert(isType({type: {type: 'array', structure: ['number', 'string']}, value: [4, '5']}));
+      assert(!isType({type: {type: 'array', structure: ['number', 'string']}, value: [4, '5', 'foobar']}));
+      assert(isType({type: {type: 'array', structure: ['number', 'string'], allowMore: true}, value: [4, '5', 'foobar']}));
     });
 
     it('works with object valueType', function() {
@@ -255,8 +263,7 @@ describe('types', function() {
         null,
         {},
         {type: 'object', valueType: 5},
-        {type: 'string', valueType: 'number'},
-        {type: 'string', structure: {foo: 'number'}}
+        {type: 'string', valueType: 'number'}
       ];
       invalidTypes.forEach(function(type) {
         assert(!isType({types: metaTypes, type: 'type', value: type}), "Should *not* be valid: " + JSON.stringify(type));
@@ -296,13 +303,21 @@ describe('types', function() {
     it('works with arrays with several elements (different types, length of array must match)', function() {
       assert(isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, [], {name: 'foobar'}]}));
       assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, []]}));
+      assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, [], {name: 'foobar'}, 'bla']}));
       assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, {}, {name: 'foobar'}]}));
       assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, [], {names: 'foobar'}]}));
     });
 
+    it('works with type specs (strings)', function() {
+      assert(isStructure({structure: 'number|string', value: 5}));
+      assert(isStructure({structure: 'number|string', value: '5'}));
+      assert(isStructure({structure: 'number|string', value: '5'}));
+      assert(!isStructure({structure: 'number|string', value: {}}));
+    });
+
     it('raises an exception for invalid structures', function() {
       assert.throws(function() {
-        isStructure({structure: 'number', value: [1]});
+        isStructure({structure: 5, value: [1]});
       });
     });
   });

@@ -36,6 +36,42 @@ describe('util', function() {
     });
   });
 
+  describe('isNil', function() {
+    it('returns true for null and undefined', function() {
+      assert(u.isNil(null));
+      assert(u.isNil(undefined));
+      assert(!u.isNil(0));
+      assert(!u.isNil(''));
+      assert(!u.isNil(false));
+      assert(!u.isNil({}));
+      assert(!u.isNil([]));
+    });
+  });
+
+  describe('empty', function() {
+    it('works for strings', function() {
+      assert(u.empty(''));
+      assert(u.empty('   '));
+      assert(!u.empty('foobar'));
+    });
+
+    it('works for objects', function() {
+      assert(u.empty({}));
+      assert(!u.empty({foo: 'bar'}));
+    });
+
+    it('works for arrays', function() {
+      assert(u.empty([]));
+      assert(!u.empty(['foobar']));
+    });
+
+    it('returns false for other types', function() {
+      [false, true, 0, /foobar/, new Date()].forEach(function(v) {
+        assert(!u.empty(v));
+      });
+    });
+  });
+
   describe('uniq', function() {
     it('works with different data types in an array', function() {
       assert.equal(uniq([5, '5', 5, '5', 'foo']), [5, '5', 'foo']);
