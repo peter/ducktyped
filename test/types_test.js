@@ -283,7 +283,7 @@ describe('types', function() {
       assert(isStructure({structure: structure, value: value}));
     });
 
-    it('works with arrays', function() {
+    it('works with arrays with one element (same type for all)', function() {
       assert(isStructure({structure: ['number'], value: [1]}));
       assert(isStructure({structure: ['number'], value: [5, 2, 3.14]}));
       assert(isStructure({structure: ['number'], value: []}));
@@ -291,6 +291,13 @@ describe('types', function() {
       assert(!isStructure({structure: ['number'], value: null}));
       assert(!isStructure({structure: ['number'], value: {}}));
       assert(!isStructure({structure: ['number'], value: true}));
+    });
+
+    it('works with arrays with several elements (different types, length of array must match)', function() {
+      assert(isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, [], {name: 'foobar'}]}));
+      assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, []]}));
+      assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, {}, {name: 'foobar'}]}));
+      assert(!isStructure({structure: ['number', 'array', {name: 'string'}], value: [1, [], {names: 'foobar'}]}));
     });
 
     it('raises an exception for invalid structures', function() {
