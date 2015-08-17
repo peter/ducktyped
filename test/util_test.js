@@ -3,7 +3,9 @@
 var testHelper = require('test/test_helper'),
     assert = testHelper.assert,
     u = require('lib/util'),
-    typeOf = u.typeOf;
+    typeOf = u.typeOf,
+    uniq = u.uniq,
+    merge = u.merge;
 
 describe('util', function() {
   describe('typeOf', function() {
@@ -31,6 +33,32 @@ describe('util', function() {
     it('works with RegExp and Date', function() {
       assert.equal(typeOf(new Date()), 'date');
       assert.equal(typeOf(/foobar/), 'regexp');
+    });
+  });
+
+  describe('uniq', function() {
+    it('works with different data types in an array', function() {
+      assert.equal(uniq([5, '5', 5, '5', 'foo']), [5, '5', 'foo']);
+    });
+  });
+
+  describe('merge', function() {
+    it('does a shallow and non mutating merge from one object into another', function() {
+      var to = {
+        foo: 'bar',
+        bar: 1
+      };
+      var from = {
+        foo: 'baaar',
+        baz: 2
+      };
+      var expect = {
+        foo: 'baaar',
+        bar: 1,
+        baz: 2
+      };
+      assert.equal(merge(to, from), expect);
+      assert.equal(to, {foo: 'bar', bar: 1}, "to object should not be mutated");
     });
   });
 });
