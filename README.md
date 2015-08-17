@@ -6,6 +6,7 @@ Work in progress, check back soon :)
 
 ## TODO
 
+* typedFunction with [type] will require all arguments to have same type...
 * Validate that types that are passed in are valid, i.e. {person: {name: 'string', email: 'string'}} should be {person: {structure: {name: 'string', email: 'string'}}}
 * Ability to have ['string'] in type definition instead of {type: 'array', valueType: 'string'}?
 

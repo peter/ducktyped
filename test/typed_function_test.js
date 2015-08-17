@@ -2,7 +2,6 @@
 
 var testHelper = require('test/test_helper'),
     assert = testHelper.assert,
-    u = require('lib/util'),
     t = require('lib/typed_function'),
     typedFunction = t.typedFunction;
 
