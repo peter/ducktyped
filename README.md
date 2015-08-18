@@ -29,7 +29,8 @@ var TYPES = {
     type: 'object',
     structure: {
       force: 'boolean?'
-    }
+    },
+    allowMore: false
   }
 };
 var typedFunction = require('ducktyped').typedFunction({types: TYPES})
@@ -45,6 +46,7 @@ deliver(recipe, {force: true});
 // INVALID INVOCATIONS THAT RAISE AN EXCEPTION:
 deliver('Pancakes');
 deliver(recipe, {force: 'yes'});
+deliver(recipe, {foobar: true});
 ```
 
 ## TODO

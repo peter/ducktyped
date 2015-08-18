@@ -3,8 +3,7 @@
 var testHelper = require('test/test_helper'),
     assert = testHelper.assert,
     t = require('lib/typed_function'),
-    typedFunction = t.typedFunction,
-    variadicTypedFunction = t.variadicTypedFunction;
+    typedFunction = t.typedFunction;
 
 var TYPES = {
   person: {
@@ -112,29 +111,28 @@ describe('typed_function', function() {
       }, /does not match/);
     });
 
+    it('works with type objects (typeDef) instead of array', function() {
+      var options = {types: TYPES};
+      var untypedFunction = echoArgs;
+      var fn = typedFunction(options, {type: 'array', valueType: 'recipe', allowEmpty: false}, untypedFunction);
+      var recipe = {name: 'Pancakes', ingredients: ['milk', 'eggs', 'flour']};
+
+      // VALID INVOCATIONS:
+      assert.equal(fn(recipe, recipe), [recipe, recipe]);
+
+      // INVALID INVOCATIONS
+      assert.throws(function() {
+        fn();
+      }, /does not match/);
+      assert.throws(function() {
+        fn(recipe, 'Pancakes');
+      }, /does not match/);
+    });
+
     it('works with variadic functions', function() {
       var options = {types: TYPES, variadic: true};
       var untypedFunction = echoArgs;
       var fn = typedFunction(options, ['recipe'], untypedFunction);
-      var recipe = {name: 'Pancakes', ingredients: ['milk', 'eggs', 'flour']};
-
-      // VALID INVOCATIONS:
-      assert.equal(fn(recipe), [recipe]);
-      assert.equal(fn(recipe, 'foobar'), [recipe, 'foobar']);
-      assert.equal(fn(recipe, 'foobar', true), [recipe, 'foobar', true]);
-
-      // INVALID INVOCATIONS
-      assert.throws(function() {
-        fn('Pancakes');
-      }, /does not match/);
-    });
-  });
-
-  describe('variadicTypedFunction', function() {
-    it('does not require arity of function to match number of arguments passed', function() {
-      var options = {types: TYPES};
-      var untypedFunction = echoArgs;
-      var fn = variadicTypedFunction(options, ['recipe'], untypedFunction);
       var recipe = {name: 'Pancakes', ingredients: ['milk', 'eggs', 'flour']};
 
       // VALID INVOCATIONS:
