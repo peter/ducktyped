@@ -51,12 +51,9 @@ deliver(recipe, {foobar: true});
 
 ## TODO
 
-* Use multiple arguments instead of array for typedFunction positional arguments
-* typedFunction with [type] will require all arguments to have same type...
-* Validate that types that are passed in are valid, i.e. {person: {name: 'string', email: 'string'}} should be {person: {structure: {name: 'string', email: 'string'}}}
-* Ability to have ['string'] in type definition instead of {type: 'array', valueType: 'string'}?
+* Validate that arguments passed to API are sane
+* Type checks on function return values?
 * Type conversions, custom conversions, default conversions (string to float, string to integer, string to date), conversions: false
-* Do we need a variadicTypedFunction?
 
 ## Basic types
 

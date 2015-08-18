@@ -56,7 +56,7 @@ describe('typed_function', function() {
 
       assert.throws(function() {
         fn(invalidArgs);
-      }, /does not match/);
+      }, /do not match/);
     });
 
     it('works with positional arguments', function() {
@@ -86,7 +86,7 @@ describe('typed_function', function() {
 
       assert.throws(function() {
         fn.appy(null, invalidArgs);
-      }, /does not match/);
+      }, /do not match/);
     });
 
     it('works with an options parameter', function() {
@@ -102,13 +102,13 @@ describe('typed_function', function() {
       // INVALID INVOCATIONS
       assert.throws(function() {
         fn('Pancakes');
-      }, /does not match/);
+      }, /do not match/);
       assert.throws(function() {
         fn(recipe, {foobar: true});
-      }, /does not match/);
+      }, /do not match/);
       assert.throws(function() {
         fn(recipe, {force: 'yes'});
-      }, /does not match/);
+      }, /do not match/);
     });
 
     it('works with type objects (typeDef) instead of array', function() {
@@ -123,10 +123,10 @@ describe('typed_function', function() {
       // INVALID INVOCATIONS
       assert.throws(function() {
         fn();
-      }, /does not match/);
+      }, /do not match/);
       assert.throws(function() {
         fn(recipe, 'Pancakes');
-      }, /does not match/);
+      }, /do not match/);
     });
 
     it('works with variadic functions', function() {
@@ -143,7 +143,7 @@ describe('typed_function', function() {
       // INVALID INVOCATIONS
       assert.throws(function() {
         fn('Pancakes');
-      }, /does not match/);
+      }, /do not match/);
     });
   });
 });
