@@ -22,7 +22,8 @@ var TYPES = {
     type: 'object',
     structure: {
       force: 'boolean?'
-    }
+    },
+    allowMore: false
   }
 };
 
@@ -102,6 +103,9 @@ describe('typed_function', function() {
       // INVALID INVOCATIONS
       assert.throws(function() {
         fn('Pancakes');
+      }, /does not match/);
+      assert.throws(function() {
+        fn(recipe, {foobar: true});
       }, /does not match/);
       assert.throws(function() {
         fn(recipe, {force: 'yes'});
