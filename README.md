@@ -66,6 +66,42 @@ var fn = typedFunction(['interest', 'interest', 'interest'], function(a, b, c) {
 fn(null, 3.2, '5.0') // => [1.03, 3.2, 5.0]);
 ```
 
+### Custom Type Hierarchies
+
+```javascript
+var TYPES = {
+  posNumber: {
+    validate: function(v) { return v > 0; },
+    type: 'number'
+  },
+  integer: {
+    validate: function(v) { return isFinite(v) && Math.floor(v) === v; },
+    type: 'number'
+  },
+  posInteger: {
+    validate: function(v) { return v > 0; },
+    type: 'integer'
+  },
+  yieldFactor: {
+    validate: function(v) { return v > 1.0; },
+    type: 'number'
+  },
+  interest: {
+    type: 'yieldFactor',
+    default: 1.03
+  },
+  yearlyYield: {
+    type: 'yieldFactor',
+    default: 1.08
+  },
+  tax: {
+    type: 'number',
+    validate: function(v) { return v > 0 && v < 1.0; },
+    default: 0.3
+  }
+};
+```
+
 ## TODO
 
 * Validate that arguments passed to API are sane
