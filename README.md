@@ -71,9 +71,10 @@ fn(null, 3.2, '5.0') // => [1.03, 3.2, 5.0]);
 * Validate that arguments passed to API are sane
 * Type checks on function return values?
 * Add validation to type conversions (date etc.)
-* Type conversions, custom conversions, default conversions (string to float, string to integer, string to date), conversions: false
 
-## Basic types
+## Basic Types
+
+Here are the names used for basic JavaScript types:
 
 ```
 null
