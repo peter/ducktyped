@@ -2,8 +2,6 @@
 
 Runtime type checking for JavaScript
 
-Work in progress, check back soon :)
-
 ## Motivation
 
 JavaScript neither checks the number of arguments passed to a function or their type.
@@ -34,6 +32,7 @@ var TYPES = {
   }
 };
 var typedFunction = require('ducktyped').typedFunction({types: TYPES})
+
 var deliver = typedFunction(['recipe', 'deliverOptions?'], function(recipe, options) {
   // Implementation of deliver here
 });
@@ -59,7 +58,8 @@ var types = {
   }
 };
 var typedFunction = require('ducktyped').typedFunction({types: types, transform: true});
-var fn = typedFunction(options, ['interest', 'interest', 'interest'], function(a, b, c) {
+
+var fn = typedFunction(['interest', 'interest', 'interest'], function(a, b, c) {
   return [a, b, c];
 });
 
