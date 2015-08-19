@@ -145,5 +145,19 @@ describe('typed_function', function() {
         fn('Pancakes');
       }, /do not match/);
     });
+
+    it('can optionally invoke transform on argument values', function() {
+      var types = {
+        interest: {
+          type: 'number',
+          default: 1.03
+        }
+      };
+      var options = {types: types, transform: true};
+      var untypedFunction = echoArgs;
+      var fn = typedFunction(options, ['interest', 'interest', 'interest'], untypedFunction);
+
+      assert.equal(fn(null, 3.2, '5.0'), [1.03, 3.2, 5.0]);
+    });
   });
 });

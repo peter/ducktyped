@@ -49,6 +49,23 @@ deliver(recipe, {force: 'yes'});
 deliver(recipe, {foobar: true});
 ```
 
+### Function Arguments with Defaults and Type conversions
+
+```javascript
+var types = {
+  interest: {
+    type: 'number',
+    default: 1.03
+  }
+};
+var typedFunction = require('ducktyped').typedFunction({types: types, transform: true});
+var fn = typedFunction(options, ['interest', 'interest', 'interest'], function(a, b, c) {
+  return [a, b, c];
+});
+
+fn(null, 3.2, '5.0') // => [1.03, 3.2, 5.0]);
+```
+
 ## TODO
 
 * Validate that arguments passed to API are sane

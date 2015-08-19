@@ -117,10 +117,12 @@ describe('transform', function() {
       var expect = {
         foo: {
           bar: [1.03, 5.0, 3.2],
-          baz: 1.03
+          baz: 1.03,
+          bla: undefined
         }
       };
-      assert.equal(t.transformStructure({types: types, structure: structure, value: value}), expect);
+      var actual = t.transformStructure({types: types, structure: structure, value: value});
+      assert.equal(actual, expect);
     });
   });
 });
