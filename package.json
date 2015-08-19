@@ -1,6 +1,6 @@
 {
   "name": "ducktyped",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Runtime type checking for JavaScript",
   "main": "index.js",
   "scripts": {
