@@ -53,6 +53,7 @@ deliver(recipe, {foobar: true});
 
 * Validate that arguments passed to API are sane
 * Type checks on function return values?
+* Add validation to type conversions (date etc.)
 * Type conversions, custom conversions, default conversions (string to float, string to integer, string to date), conversions: false
 
 ## Basic types

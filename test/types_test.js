@@ -4,6 +4,7 @@ var u = require('lib/util'),
     testHelper = require('test/test_helper'),
     assert = testHelper.assert,
     types = require('lib/types'),
+    baseType = types.baseType,
     spec = types.spec,
     basicTypes = types.basicTypes,
     metaTypes = types.metaTypes,
@@ -25,6 +26,26 @@ var TYPES = {
 };
 
 describe('types', function() {
+  describe('baseType', function() {
+    it('returns the base type for a custom type', function() {
+      var types = {
+        yieldFactor: {
+          validate: function(v) { return v > 1.0; },
+          type: 'number'
+        },
+        interest: {
+          type: 'yieldFactor',
+          default: 1.03
+        }
+      };
+      assert.equal(baseType(types, types.interest), 'number');
+      assert.equal(baseType(types, types.yieldFactor), 'number');
+      assert.equal(baseType(types, types.yieldFactor), 'number');
+      assert.equal(baseType(types, {type: 'boolean'}), 'boolean');
+      assert.equal(baseType(types, {}), 'any');
+    });
+  });
+
   describe('validateName', function() {
     it('works with a basic type name', function() {
       basicTypes.forEach(function(typeName) {
