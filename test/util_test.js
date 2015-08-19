@@ -97,4 +97,35 @@ describe('util', function() {
       assert.equal(to, {foo: 'bar', bar: 1}, "to object should not be mutated");
     });
   });
+
+  describe('compact', function() {
+    it('gets not nil items from list', function() {
+      assert.equal(u.compact(['a', null, 'a', undefined, 'c', 'b', null]), ['a', 'a', 'c', 'b']);
+    });
+  });
+
+  describe('uniq', function() {
+    it('get unique items from a list', function() {
+      assert.equal(u.uniq(['a', 'b', 'a', 'c', 'c', 'b', 'b']), ['a', 'b', 'c']);
+    });
+  });
+
+  describe('compose', function() {
+    it('can compose functions', function() {
+      var double = function(v) { return 2*v; },
+          pow2 = function(v) { return v*v; };
+      assert.equal(u.compose([pow2, double])(5), 100);
+      assert.equal(u.compose(pow2, double)(5), 100);
+    });
+  });
+
+  describe('pipe', function() {
+    it('can pipe arguments through functions with value as first arg and retain additional args', function() {
+      var _options = {factor: 3},
+          foo = function(v, options) { assert.equal(options, _options); return 2*v; },
+          bar = function(v, options) { assert.equal(options, _options); return v*v; };
+      assert.equal(u.pipe([foo, bar])(5, _options), 100);
+      assert.equal(u.pipe(foo, bar)(5, _options), 100);
+    });
+  });
 });
