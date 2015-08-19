@@ -102,6 +102,26 @@ var TYPES = {
 };
 ```
 
+### Union Types
+
+```javascript
+'number|string'
+```
+
+### Intersection Types
+
+```javascript
+'positiveInteger&evenInteger'
+```
+
+### Optional Types
+
+Adding a question mark at the end means null/undefined are allowed:
+
+```javascript
+'object?'
+```
+
 ## TODO
 
 * Validate that arguments passed to API are sane
