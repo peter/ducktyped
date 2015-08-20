@@ -122,6 +122,39 @@ Adding a question mark at the end means null/undefined are allowed:
 'object?'
 ```
 
+### Duck Typing vs Exact Typing
+
+Here is an example of an "exact" type:
+
+```javascript
+var types = {
+  myType: {
+    type: "object",
+    structure: {
+      name: "string",
+      popularity: "number"
+    }
+  }
+};
+```
+
+Here is a corresponding ducktype that will allow any type as long as the
+specified properties match. Also, additional properties are allowed in this
+case:
+
+```javascript
+var types = {
+  myType: {
+    type: "any",
+    structure: {
+      name: "string",
+      popularity: "number"
+    },
+    allowMore: true
+  }
+};
+```
+
 ## TODO
 
 * Validate that arguments passed to API are sane
